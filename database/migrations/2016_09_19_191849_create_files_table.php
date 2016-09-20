@@ -17,8 +17,13 @@ class CreateFilesTable extends Migration
             $table->increments('id');
             $table->string('name',100);
             $table->string('url')->unique();
-            $table->decimal('size',5,2);
+            $table->bigInteger('size');
         });
+    }
+    public function down()
+    {
+         Schema::drop('files');
+            
     }
 
     /**
@@ -26,8 +31,5 @@ class CreateFilesTable extends Migration
      *
      * @return void
      */
-    public function down()
-    {
-        //
-    }
+
 }
