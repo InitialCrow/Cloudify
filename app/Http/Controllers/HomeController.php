@@ -57,8 +57,17 @@ class HomeController extends Controller
     }
     public function deleteFile(Request $request)
     {
-        $checked = $request->input('check');
-        dd($checked);
+        $files = $request->input();
+        $urls = $files['url'];
+        $ids = $files['id'];
+      
+        for($i = 0; $i<count($ids); $i++){
+            
+            Db::table('files')->where('id','=',$ids[$i])->delete();
+            File::delete(public_path()."/uploads/".$urls[$i]);
+        }
+        return redirect('/home');
+    
     }
 
 }

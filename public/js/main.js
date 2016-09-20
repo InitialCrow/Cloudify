@@ -2,33 +2,39 @@
 
 	var app = {
 		init : function(){
-			/*this.deleteFiles();*/
+			this.deleteFiles();
 		},
+
 		deleteFiles : function(){
 			var $checked = $('.check');
-			var files = {};
-			$checked.on('click', function(evt){
+			
+			$checked.on('change', function(evt){
+				var file = {};
+				var $this = $(this);
+				file.url = $this.attr('data-url');
+				file.id = $this.attr('data-id');
 
-				for(var i = 0; i<$checked.length; i++){
-					if($checked[i].checked === true){
-						console.log($checked[i])
-						$('.readyToSend').remove();
-						files.url = $($checked[i]).attr('data-url');
-						files.id = $($checked[i]).attr('data-id');
-						$($checked[i]).after("<input class='readyToSend' type='hidden' name='url' value="+files.url+" />");
-						$($checked[i]).after("<input class='readyToSend' type='hidden' name='id' value="+files.id+" />");
+				if($this[0].checked === true){
+					if($($this.next()).attr('class') === 'readyToSend'){
+						$this.next().next().remove();
+						$this.next().remove();
 					}
-					if($checked[i].checked === false){
-						console.log($($checked[i]))
-						$('.readyToSend').remove()
-						/*$($checked[i]).first().remove();*/
+					$this.after("<input class='readyToSend' name='url[]' type='hidden' value="+file.url+">");
+					$this.after("<input class='readyToSend' name='id[]' type='hidden' value="+file.id+">")
+				}
+				else{
+					console.log($this.next())
+					if($($this.next()).attr('class') === 'readyToSend'){
+						$this.next().next().remove();
+						$this.next().remove();
 					}
+
 				}
 
 				
 			});
 			
-				}
+			}
 
 	}
 	ctx.app = app

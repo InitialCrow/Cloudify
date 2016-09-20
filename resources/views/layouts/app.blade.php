@@ -88,6 +88,7 @@
     </nav>
 
     @yield('content')
+    @include('partial.footer')
 
     <!-- Scripts -->
     <script src="/js/app.js"></script>
