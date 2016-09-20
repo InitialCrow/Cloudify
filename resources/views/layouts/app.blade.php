@@ -91,5 +91,7 @@
 
     <!-- Scripts -->
     <script src="/js/app.js"></script>
+    <script src="/js/main.js"></script>
+    <script>app.init();</script>
 </body>
 </html>

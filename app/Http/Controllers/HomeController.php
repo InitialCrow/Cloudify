@@ -55,5 +55,10 @@ class HomeController extends Controller
         
       
     }
+    public function deleteFile(Request $request)
+    {
+        $checked = $request->input('check');
+        dd($checked);
+    }
 
 }

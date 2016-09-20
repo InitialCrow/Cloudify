@@ -2,6 +2,8 @@ li{
 	list-style: none;
 }
 .file{
+
+    padding-left: 15px;
     display: inline-block;
 }
 .size{
@@ -28,4 +30,7 @@ li{
     cursor: pointer;
     opacity: 0;
     filter: alpha(opacity=0);
+}
+.delete{
+    float: right;
 }
