@@ -18,5 +18,9 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
-Route::post('/upload', 'HomeController@upload');
 Route::post('/delete', 'HomeController@deleteFile');
+Route::post('/upload', 'HomeController@upload');
+
+Route::post('/delete', 'HomeController@deleteFile');
+Route::post('/addFolder', 'HomeController@addFolder');
+Route::post('/uploads/{folder}/folder', 'HomeController@getFileInFolder');

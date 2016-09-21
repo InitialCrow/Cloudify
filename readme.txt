@@ -1,6 +1,6 @@
 Cloudify
 
-ver 0.2 with laravel
+ver 0.2.1 with laravel
 
 add delete multiple systeme fix some bugs
 

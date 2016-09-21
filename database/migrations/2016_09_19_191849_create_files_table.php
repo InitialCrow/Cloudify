@@ -14,10 +14,13 @@ class CreateFilesTable extends Migration
     public function up()
     {
          Schema::create('files', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('name',100);
             $table->string('url')->unique();
             $table->bigInteger('size');
+            $table->integer('folder_id')->unsigned()->nullable();
+            $table->foreign('folder_id')->references('id')->on('folders');
         });
     }
     public function down()

@@ -31,13 +31,32 @@ li{
     opacity: 0;
     filter: alpha(opacity=0);
 }
+.panel{
+    clear: both;
+}
 .delete{
     float: right;
 }
+.add-folder{
+    margin-left: 25px;
+    display: inline-block;
+}
+.add-button{
+    
+    margin-top: 10px;
+    float: right;
+    
+}
+.folder{
+    margin-right: 10px;
+    vertical-align: top;
+}
 .main-footer{
+    
     position:absolute;
    bottom:0;
    width:100%;
    height:60px;   /* Height of the footer */
     text-align: center;
 }
+
