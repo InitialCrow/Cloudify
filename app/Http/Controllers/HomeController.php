@@ -25,23 +25,43 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        
+        $session = $request->session();
+        $session->put('folder_open', false);
+        $session->put('folder_id', null);
+        $session->put('prevPath', null);
+
+
         $files = $this->getFiles();
         $folders = $this->getFolders();
     
-        return view('home',['files'=>$files, 'folders'=>$folders]);
+        return view('home',['files'=>$files, 'folders'=>$folders,'opened'=>$session->get('folder_open')]);
     }
-    public function getFileInFolder($folder)
+    public function getFileInFolder(Request $request, $folder)
     {
-
+      $session = $request->session();
+      $session->put('folder_open', true);
       $folders = Db::table('folders')->select('*')->where('name', '=',$folder)->get();
+      $session->put('folder_id', $folders[0]->id );
+      $currentFolder = $session->get('prevPath');
+
+      if($currentFolder === null){
+        $session->put('prevPath', $folders[0]->name);
+      } //if we are in root
+      else{
+        $currentFolder = $currentFolder.'/'.$folders[0]->name;
+        $session->put('prevPath', $currentFolder);
+      }
+      
+      $subFolders = Db::table('folders')->select('*')->where('folder_id','=',$folders[0]->id)->get();
      
 
       $files = Db::table('files')->select('*')->where('folder_id', '=',$folders[0]->id)->get();
       
       
-      return $files;
+      return view('home',['files'=>$files, 'folders'=>$folders, 'subFolders'=>$subFolders,'opened'=>$session->get('folder_open')]);
     
       
     }
@@ -55,17 +75,19 @@ class HomeController extends Controller
 
     }
     public function getFolders(){
-        $folders = DB::table('folders')->get();
+        $folders = DB::table('folders')->select('*')->where('folder_id','=',null)->get();
         return $folders;
     }
     public function upload(Request $request)
     {
+
         $files = $request->file('upload_file');
-        $folderId = $request->input('folder_id');
+        $session = $request->session();
+        $folderId = $session->get('folder_id');
+        $opened = $session->get('folder_open');
 
-        if($folderId !== null){
+        if($folderId == null && $opened === false){// we are in root
 
-            $folder = Db::table('folders')->select('name')->where('id','=',$folderId)->get();
             foreach ($files as $file) {
                 $name  =  $file->getClientOriginalName();
                 $size = $file->getClientSize();
@@ -75,27 +97,30 @@ class HomeController extends Controller
                     "name" => $name,
                     "url" => $url,
                     "size" => $size,
-                    "folder_id"=> $folderId
+                    
                 ]);
                 
-                $file->move('./uploads/'.$folder[0]->name.'/', $url);
+                $file->move(public_path().'/uploads/',$url);
             }
         }
         else{
+         
+            $folder = Db::table('folders')->select('name')->where('id','=',$folderId)->get();
+            $prevPath = $session->get('prevPath').'/';
 
             foreach ($files as $file) {
                 $name  =  $file->getClientOriginalName();
                 $size = $file->getClientSize();
                 $url = str_random(40).'.'.$file->getClientOriginalExtension();
-              
+            
                 Db::table('files')->insert([
                     "name" => $name,
-                    "url" => $url,
+                    "url" => $prevPath.$url,
                     "size" => $size,
                     "folder_id"=> $folderId
                 ]);
                 
-                $file->move('./uploads', $url);
+                $file->move(public_path().'/uploads/'.$prevPath,$url);
             }
 
         
@@ -132,12 +157,31 @@ class HomeController extends Controller
     }
     public function addFolder(Request $request)
     {
-        $folder = $request->input('addFolder');
-        Db::table('folders')->insert([
-            'name'=>$folder
-        ]);
-        File::makeDirectory(public_path()."/uploads/".$folder,0775,true);
+        $folderName = $request->input('addFolder');
+        $session = $request->session();
+        $prevPath = $session->get('prevPath');
+        $opened = $session->get('foler_open');
+        $folder_id = $session->get('folder_id');
+        
+        if($opened === false && $folder_id !== null) // if we are in root
+        {
+            
+                Db::table('folders')->insert([
+                'name'=>$folderName,
+                'folder_id' =>$folder_id
+            ]);
+            File::makeDirectory(public_path()."/uploads/".$folderName,0775,true);
+        }
+        else{// if we are in subfolder
+            
+            Db::table('folders')->insert([
+                'name'=>$folderName,
+                'folder_id' =>$folder_id
+            ]);
+            File::makeDirectory(public_path()."/uploads/".$prevPath.'/'.$folderName,0775,true);
+        }
+
+        
         return redirect('/home');
     }
-
 }

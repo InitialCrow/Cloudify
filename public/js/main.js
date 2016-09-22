@@ -3,7 +3,7 @@
 	var app = {
 		init : function(){
 			this.deleteFiles();
-			this.addFile();
+			this.addFolder();
 			this.switchFolder();
 		},
 
@@ -38,7 +38,7 @@
 				evt.preventDefault();
 
 			
-				$form.attr('action','delete');
+				$form.attr('action','/delete');
 				$form.submit();
 			});
 
@@ -46,7 +46,6 @@
 		},
 		switchFolder : function(){
 			var $folder = $('.folder');
-			var $panel = $('.panel-body');
 			var $id = null;
 			var $nameFolder = null;
 
@@ -56,10 +55,7 @@
 				
 				$id= $(this).attr('data-id-folder');
 				$nameFolder = $(this).attr('data-name-folder');
-				$panel.empty();
-				
-				$panel.prepend('<a href="#" class="return-btn"><-</a>');
-				
+
 				if($(this).attr('href') === 'uploads/'+$nameFolder){
 					evt.preventDefault();
 
@@ -69,39 +65,41 @@
 
 					
 				
-					$('.uploaded-form').attr(('action'),'uploads/'+$nameFolder+'/folder');//ajoute un nouveau dossier
+					$('.uploaded-form').attr(('action'),'/uploads/'+$nameFolder+'/folder');//ajoute un nouveau dossier
 					
 					$('#upload-form').append("<input class='folder-id' type='hidden' name='folder_id' value="+$id+">")
-					$('.uploaded-form').append("<input class='folder-id' type='hidden' name='folder_id' value="+$id+">")
+					$('.uploaded-form').append("<input class='folder-id' type='hidden' name='folder_id' value="+$id+">");
+					$('.uploaded-form').submit();
 
-					$.ajax({
-						headers: {
-						    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-						},
-						url : $('.uploaded-form').attr('action'),
-						type :'post',
-						datatype:'json',
+
+					// $.ajax({
+					// 	headers: {
+					// 	    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					// 	},
+					// 	url : $('.uploaded-form').attr('action'),
+					// 	type :'post',
+					// 	datatype:'json',
 						
 						
 
 						
-						success : function(result, http, msg){
-							var $fileList= $('.panel-body');
-							for(var i =0; i<result.length; i++){
+					// 	success : function(result, http, msg){
+					// 		var $fileList= $('.panel-body');
+					// 		for(var i =0; i<result.length; i++){
 								
-								$fileList.append("<li><input type='checkbox' class='check' name='check' data-url="+result[i].url+" data-id="+result[i].id+"><span class='file'><a href='uploads"+result[i].url+"'>"+result[i].name+"</a></span> <span class='size'>size : "+result[i].size+" octet</span> <span class='download'><a href='uploads"+result[i].url+" download='"+result[i].name+"'>Download</a></span></li>")
+					// 			$fileList.append("<li><input type='checkbox' class='check' name='check' data-url="+result[i].url+" data-id="+result[i].id+"><span class='file'><a href='uploads"+result[i].url+"'>"+result[i].name+"</a></span> <span class='size'>size : "+result[i].size+" octet</span> <span class='download'><a href='uploads"+result[i].url+" download='"+result[i].name+"'>Download</a></span></li>")
 
 
 								
 								
-							}
-							self.deleteFiles();
-						},
-						error : function(result, http, msg){
-							console.log(msg);
-						},
+					// 		}
+					// 		self.deleteFiles();
+					// 	},
+					// 	error : function(result, http, msg){
+					// 		console.log(msg);
+					// 	},
 
-					});
+					// });
 				}
 				
 			});
@@ -110,7 +108,7 @@
 				
 		
 		},
-		addFile : function(){
+		addFolder : function(){
 			var $add = $('.add-folder');
 			var $form = $('.uploaded-form');
 

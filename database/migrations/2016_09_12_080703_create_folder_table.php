@@ -17,6 +17,7 @@ class CreateFolderTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('name',100);
+            $table->integer('folder_id')->nullable();
         });
     }
     public function down()

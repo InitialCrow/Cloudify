@@ -1,3 +1,3 @@
 <footer class="main-footer">
-	&copy Cloudify 0.2.1
+	&copy Cloudify 0.2.2
 </footer>

@@ -13,12 +13,21 @@
 
                 <div class="panel-body">
                 @forelse ($folders as $folder)
-                    <li ><a data-name-folder="{{$folder->name}}" data-id-folder="{{$folder->id}}" href="uploads/{{$folder->name}}" class="folder"><img class="folder" src="css/img/folder.png" alt="logo d'un fichier" width="15px" height="15px">{{$folder->name}}</a></li>
+                    @if($folder->folder_id === null && $opened === false)
+                    
+                    <li ><a data-name-folder="{{$folder->name}}" data-id-folder="{{$folder->id}}" href="uploads/{{$folder->name}}" class="folder"><img class="folder" src="/css/img/folder.png" alt="logo d'un dossier" width="15px" height="15px">{{$folder->name}}</a></li>
+                    @else
+                    @foreach($subFolders as $sub)
+                    <li ><a data-name-folder="{{$sub->name}}" data-id-folder="{{$sub->id}}" href="uploads/{{$sub->name}}" class="folder"><img class="folder" src="/css/img/folder.png" alt="logo d'un dossier" width="15px" height="15px">{{$sub->name}}</a></li>
+                    @endforeach
+                    @endif
+
+
                 @empty
                 @endforelse
                 
                 @forelse ($files as $file)
-                    <li><input type="checkbox" class="check" name="check" data-url='{{$file->url}}' data-id='{{$file->id}}'><span class="file"><a href="uploads/{{$file->url}}">{{ $file->name }}</a></span> <span class="size">size : {{$file->size}} octet</span> <span class="download"><a href="uploads/{{$file->url}}" download="{{$file->name}}">Download</a></span></li>
+                    <li><input type="checkbox" class="check" name="check" data-url='{{$file->url}}' data-id='{{$file->id}}'><span class="file"><a href="/uploads/{{$file->url}}">{{ $file->name }}</a></span> <span class="size">size : {{$file->size}} octet</span> <span class="download"><a href="/uploads/{{$file->url}}" download="{{$file->name}}">Download</a></span></li>
                 @empty
                     <p>No files on your server</p>
                 @endforelse
