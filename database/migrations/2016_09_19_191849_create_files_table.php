@@ -20,7 +20,7 @@ class CreateFilesTable extends Migration
             $table->string('url')->unique();
             $table->bigInteger('size');
             $table->integer('folder_id')->unsigned()->nullable();
-            $table->foreign('folder_id')->references('id')->on('folders');
+            $table->foreign('folder_id')->references('id')->on('folders')->onDelete('cascade');
         });
     }
     public function down()
@@ -29,10 +29,5 @@ class CreateFilesTable extends Migration
             
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
 
 }

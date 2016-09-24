@@ -24,3 +24,4 @@ Route::post('/upload', 'HomeController@upload');
 Route::post('/delete', 'HomeController@deleteFile');
 Route::post('/addFolder', 'HomeController@addFolder');
 Route::post('/uploads/{folder}/folder', 'HomeController@getFileInFolder');
+Route::post('/download/{folder}/zipify', 'HomeController@zipify');

@@ -15,10 +15,11 @@
                 @forelse ($folders as $folder)
                     @if($folder->folder_id === null && $opened === false)
                     
-                    <li ><a data-name-folder="{{$folder->name}}" data-id-folder="{{$folder->id}}" href="uploads/{{$folder->name}}" class="folder"><img class="folder" src="/css/img/folder.png" alt="logo d'un dossier" width="15px" height="15px">{{$folder->name}}</a></li>
+                    <li ><input type="checkbox" class="check-folder" name="check-folder" data-url='{{$folder->name}}' data-id='{{$folder->id}}'><a data-name-folder="{{$folder->name}}" data-id-folder="{{$folder->id}}" href="uploads/{{$folder->name}}" class="folder"><img class="folder" src="/css/img/folder.png" alt="logo d'un dossier" width="15px" height="15px">{{$folder->name}}</a><span class="download"><a  href="/uploads/{{$folder->name}}" download="{{$folder->name}}" class="folder-down" data-name-folder="{{$folder->name}}">Download</a></span></li>
+
                     @else
                     @foreach($subFolders as $sub)
-                    <li ><a data-name-folder="{{$sub->name}}" data-id-folder="{{$sub->id}}" href="uploads/{{$sub->name}}" class="folder"><img class="folder" src="/css/img/folder.png" alt="logo d'un dossier" width="15px" height="15px">{{$sub->name}}</a></li>
+                    <li ><input type="checkbox" class="check-folder" name="check-folder" data-url='{{$sub->name}}' data-id='{{$sub->id}}'><a data-name-folder="{{$sub->name}}" data-id-folder="{{$sub->id}}" href="uploads/{{$sub->name}}" class="folder"><img class="folder" src="/css/img/folder.png" alt="logo d'un dossier" width="15px" height="15px">{{$sub->name}}</a><span class="download"><a href="/uploads/{{$sub->name}}" download="{{$sub->name}}" data-name-folder="{{$sub->name}}" class="folder-down">Download</a></span></li>
                     @endforeach
                     @endif
 
@@ -27,7 +28,7 @@
                 @endforelse
                 
                 @forelse ($files as $file)
-                    <li><input type="checkbox" class="check" name="check" data-url='{{$file->url}}' data-id='{{$file->id}}'><span class="file"><a href="/uploads/{{$file->url}}">{{ $file->name }}</a></span> <span class="size">size : {{$file->size}} octet</span> <span class="download"><a href="/uploads/{{$file->url}}" download="{{$file->name}}">Download</a></span></li>
+                    <li><input type="checkbox" class="check" name="check" data-url='{{$file->url}}' data-id='{{$file->id}}'><span class="file"><a href="/uploads/{{$file->url}}">{{ $file->name }}</a></span> <span class="size">size : {{$file->size}} octet</span> <span class="download"><a href="/uploads/{{$file->url}}" download="{{$file->name}}" >Download</a></span></li>
                 @empty
                     <p>No files on your server</p>
                 @endforelse

@@ -2,9 +2,48 @@
 
 	var app = {
 		init : function(){
+			this.deleteFolder();
 			this.deleteFiles();
 			this.addFolder();
 			this.switchFolder();
+			this.zipify();
+		},
+		deleteFolder : function(){
+			var $checked = $('.check-folder');
+			var $delete = $('.delete');
+			var $form = $('.uploaded-form');
+
+			$checked.on('change', function(evt){
+				
+				var folder = {};
+				var $this = $(this);
+				folder.url = $this.attr('data-url');
+				folder.id = $this.attr('data-id');
+
+				if($this[0].checked === true){
+
+					if($($this.next()).attr('class') === 'readyToSend'){
+						$this.next().next().remove();
+						$this.next().remove();
+					}
+					$this.after("<input class='readyToSend' name='url-folder[]' type='hidden' value="+folder.url+">");
+					$this.after("<input class='readyToSend' name='id-folder[]' type='hidden' value="+folder.id+">")
+				}
+				else{
+					if($($this.next()).attr('class') === 'readyToSend'){
+						$this.next().next().remove();
+						$this.next().remove();
+					}
+
+				}
+			});
+			$delete.on('click', function(evt){
+				evt.preventDefault();
+
+			
+				$form.attr('action','/delete');
+				$form.submit();
+			});
 		},
 
 		deleteFiles : function(){
@@ -13,6 +52,8 @@
 			var $form = $('.uploaded-form');
 			
 			$checked.on('change', function(evt){
+
+				
 				var file = {};
 				var $this = $(this);
 				file.url = $this.attr('data-url');
@@ -59,7 +100,6 @@
 				if($(this).attr('href') === 'uploads/'+$nameFolder){
 					evt.preventDefault();
 
-
 				
 					$('.panel-body').append("<ul class='file-list'></ul>")
 
@@ -69,7 +109,10 @@
 					
 					$('#upload-form').append("<input class='folder-id' type='hidden' name='folder_id' value="+$id+">")
 					$('.uploaded-form').append("<input class='folder-id' type='hidden' name='folder_id' value="+$id+">");
+					
 					$('.uploaded-form').submit();
+				
+					
 
 
 					// $.ajax({
@@ -103,10 +146,7 @@
 				}
 				
 			});
-		
-				
-				
-		
+
 		},
 		addFolder : function(){
 			var $add = $('.add-folder');
@@ -120,6 +160,18 @@
 				$form.prepend("<h2>Name your folder</h2>");
 				$('.add').after("<button type= 'submit' class='btn btn-success add-button' >add</button>")
 
+			});
+		},
+		zipify : function(){
+
+			var $folderDown = $('.folder-down');
+			var $form = $('.uploaded-form');
+
+			$folderDown.on('click', function(evt){
+				evt.preventDefault();
+				var $nameFolder = $(this).attr('data-name-folder');
+				$form.attr('action','/download/'+$nameFolder+'/zipify');
+				$form.submit();
 			});
 		}
 

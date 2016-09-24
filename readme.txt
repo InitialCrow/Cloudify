@@ -1,8 +1,8 @@
 Cloudify
 
-ver 0.2.2 with laravel
+ver 0.3 with laravel Framework
 
-add delete multiple systeme fix some bugs
+add folder manager (auto zip recursive zip convert on folder download or subfolder) and fix bugs
 
 --------------------- -----------------
 
@@ -10,8 +10,10 @@ features :
 
 * where am I
 
-upload a folder and app will zip it *
 
-add save download all files in zip
+add download folder with convert in zip [x]
 
-add file manager can create folder on server
+add file manager can create and remove folder on server [x]
+
+prepare Cloudify 0.4 [*]
+
