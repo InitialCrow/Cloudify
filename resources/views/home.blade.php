@@ -7,11 +7,21 @@
         <form action="/delete" method="post" enctype="multipart/form-data" class="uploaded-form">
             <div class="panel panel-default">
                 
-                <div class="panel-heading">My Files <button class="btn btn-default add-folder">+</button></div>
+                <div class="panel-heading">My Files <button class="btn btn-default add-folder">Add Folder</button></div>
 
 
+                <div class="panel-heading-head">
+                @foreach ($folders as $folder)
+                    @if($folder->folder_id === null && $opened === false)
+                    <p>Root</p>
+                    @else
+                    <p>Root/{{$prevPath}}</p>
+                    @endif
+                @endforeach
 
+                </div>
                 <div class="panel-body">
+
                 @forelse ($folders as $folder)
                     @if($folder->folder_id === null && $opened === false)
                     

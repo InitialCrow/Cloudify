@@ -40,8 +40,8 @@ class HomeController extends Controller
 		$files = $this->getFiles();
 		$folders = $this->getFolders();
 		File::deleteDirectory(public_path().'/downloads');
-
-		return view('home',['files'=>$files, 'folders'=>$folders,'opened'=>$session->get('folder_open')]);
+		return view('home',['files'=>$files, 'folders'=>$folders,'opened'=>$session->get('folder_open'),'prevPath'=>$session->get('prevPath')]);
+		
 	}
 	public function getFileInFolder(Request $request, $folder)
 	{
@@ -50,14 +50,30 @@ class HomeController extends Controller
 		$folders = Db::table('folders')->select('*')->where('name', '=',$folder)->get();
 		$session->put('folder_id', $folders[0]->id );
 		$currentFolder = $session->get('prevPath');
+		$pageWasRefreshed = isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] === 'max-age=0';
 
-		if($currentFolder === null){
+		
+
+		if($currentFolder === null){ //if we are in root
 			$session->put('prevPath', $folders[0]->name);
 			$session->put('root_id',$folders[0]->id);
-		} //if we are in root
+		}
 		else{
-			$currentFolder = $currentFolder.'/'.$folders[0]->name;
-			$session->put('prevPath', $currentFolder);
+			if($pageWasRefreshed ) {
+			
+			//do something because page was refreshed;
+			
+			
+			} 
+			else {
+
+			
+				
+				$prevpath = $currentFolder.'/'.$folders[0]->name;
+
+				
+				$session->put('prevPath', $prevpath);
+			}
 		}
 
 		$subFolders = Db::table('folders')->select('*')->where('folder_id','=',$folders[0]->id)->get();
@@ -67,7 +83,7 @@ class HomeController extends Controller
 		$files = Db::table('files')->select('*')->where('folder_id', '=',$folders[0]->id)->get();
 
 
-		return view('home',['files'=>$files, 'folders'=>$folders, 'subFolders'=>$subFolders,'opened'=>$session->get('folder_open')]);
+		return view('home',['files'=>$files, 'folders'=>$folders, 'subFolders'=>$subFolders,'opened'=>$session->get('folder_open'),'prevPath'=>$session->get('prevPath')]);
 	}
 	public function getFiles()
 	{

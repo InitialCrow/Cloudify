@@ -2,6 +2,7 @@
 
 	var app = {
 		init : function(){
+
 			this.deleteFolder();
 			this.deleteFiles();
 			this.addFolder();
@@ -99,50 +100,15 @@
 
 				if($(this).attr('href') === 'uploads/'+$nameFolder){
 					evt.preventDefault();
-
 				
 					$('.panel-body').append("<ul class='file-list'></ul>")
-
-					
-				
 					$('.uploaded-form').attr(('action'),'/uploads/'+$nameFolder+'/folder');//ajoute un nouveau dossier
 					
 					$('#upload-form').append("<input class='folder-id' type='hidden' name='folder_id' value="+$id+">")
 					$('.uploaded-form').append("<input class='folder-id' type='hidden' name='folder_id' value="+$id+">");
 					
 					$('.uploaded-form').submit();
-				
-					
 
-
-					// $.ajax({
-					// 	headers: {
-					// 	    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-					// 	},
-					// 	url : $('.uploaded-form').attr('action'),
-					// 	type :'post',
-					// 	datatype:'json',
-						
-						
-
-						
-					// 	success : function(result, http, msg){
-					// 		var $fileList= $('.panel-body');
-					// 		for(var i =0; i<result.length; i++){
-								
-					// 			$fileList.append("<li><input type='checkbox' class='check' name='check' data-url="+result[i].url+" data-id="+result[i].id+"><span class='file'><a href='uploads"+result[i].url+"'>"+result[i].name+"</a></span> <span class='size'>size : "+result[i].size+" octet</span> <span class='download'><a href='uploads"+result[i].url+" download='"+result[i].name+"'>Download</a></span></li>")
-
-
-								
-								
-					// 		}
-					// 		self.deleteFiles();
-					// 	},
-					// 	error : function(result, http, msg){
-					// 		console.log(msg);
-					// 	},
-
-					// });
 				}
 				
 			});
@@ -155,10 +121,12 @@
 			$add.on('click', function(evt){
 				evt.preventDefault();
 				$form.attr('action','/addFolder');
-
-				$form.prepend("<input type='text' class='form-control add' placeholder='name of folder' name='addFolder'>");
-				$form.prepend("<h2>Name your folder</h2>");
+				$('.add-folder-form').remove();
+				$form.prepend("<div class='add-folder-form'></div>");
+				$('.add-folder-form').append("<h2>Name your folder</h2><input type='text' class='form-control add' placeholder='name of folder' name='addFolder'>");
+		
 				$('.add').after("<button type= 'submit' class='btn btn-success add-button' >add</button>")
+
 
 			});
 		},

@@ -35,9 +35,11 @@
                 </button>
 
                 <!-- Branding Image -->
-                <a class="navbar-brand" href="{{ url('/home') }}">
+                
+                <h1><img src="/css/img/cloudl.png" alt="picture of cloud" width="50px" height="50px"><a class="navbar-brand" href="{{ url('/home') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
+                </h1>
             </div>
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
