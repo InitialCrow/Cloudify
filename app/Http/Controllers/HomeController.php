@@ -76,6 +76,9 @@ class HomeController extends Controller
 			}
 		}
 
+		if($request->input('path')!==null){
+			$session->put('prevPath',$request->input('path') );
+		}
 		$subFolders = Db::table('folders')->select('*')->where('folder_id','=',$folders[0]->id)->get();
 
 

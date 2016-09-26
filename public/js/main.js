@@ -1,13 +1,69 @@
 (function(ctx,$){
 
 	var app = {
-		init : function(){
+		partOfPath : [],
+		path : "",
 
+		init : function(){
+			var homeUrl = 'http://localhost:8000/home';
+			if ( document.URL == homeUrl ){
+			    sessionStorage.clear();
+			}
+			if(sessionStorage.getItem('prevPath')){
+				self.partOfPath =sessionStorage.getItem('prevPath').split(',');
+				
+
+			}
+			this.returnPrev();
+			
 			this.deleteFolder();
 			this.deleteFiles();
 			this.addFolder();
 			this.switchFolder();
 			this.zipify();
+		},
+		returnPrev : function(){
+			var $btn = $('.return-btn');
+			var $form = $('.uploaded-form');
+			$btn.on('click',function(evt){
+				evt.preventDefault();
+
+
+				self.partOfPath.pop()
+				
+				self.path = self.partOfPath.toString();
+				self.path = self.path.replace(new RegExp(',', 'g'),'/');
+				sessionStorage.setItem('path', self.path);
+				sessionStorage.setItem('prevPath', self.partOfPath);
+				$form.append("<input type='hidden' name='path' value='"+self.path+"'>")
+				var lastFolder= self.partOfPath.pop();
+				if( lastFolder !== undefined){
+
+					$form.attr('action','/uploads/'+lastFolder+'/folder' );
+				}
+				else{
+					$form.attr('action','/home' );
+				}
+				$form.submit();
+
+				
+			});
+		},
+		initSession	: function(folder){
+			var $name = $('.dropdown-toggle')[0].innerText;
+			
+			
+			sessionStorage.setItem('name', $name);
+			sessionStorage.setItem('prevPath',"");
+	
+			var $prevPath = $(folder).attr('data-name-folder');
+			self.partOfPath.push($prevPath);
+			
+			sessionStorage.setItem('prevPath', self.partOfPath);
+			self.path = self.partOfPath.toString();
+			self.path = self.path.replace(new RegExp(',', 'g'),'/');
+			sessionStorage.setItem('path', self.path);
+
 		},
 		deleteFolder : function(){
 			var $checked = $('.check-folder');
@@ -94,7 +150,7 @@
 
 			$folder.on('click', function(evt){
 				evt.preventDefault();
-				
+				self.initSession(this);
 				$id= $(this).attr('data-id-folder');
 				$nameFolder = $(this).attr('data-name-folder');
 

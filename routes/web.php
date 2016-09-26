@@ -17,7 +17,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
+Route::any('/home', 'HomeController@index');
 Route::post('/delete', 'HomeController@deleteFile');
 Route::post('/upload', 'HomeController@upload');
 

@@ -1,6 +1,6 @@
 Cloudify
 
-ver 0.4 with laravel Framework
+ver 0.4.1 with laravel Framework
 
 upgrade ux and fix bug
 --------------------- -----------------

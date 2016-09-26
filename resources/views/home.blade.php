@@ -11,13 +11,15 @@
 
 
                 <div class="panel-heading-head">
+                <a class="return-btn btn btn-default"><-</a>
+                @if($opened === false)
+                <p>Root</p>
+                @else
                 @foreach ($folders as $folder)
-                    @if($folder->folder_id === null && $opened === false)
-                    <p>Root</p>
-                    @else
                     <p>Root/{{$prevPath}}</p>
-                    @endif
+                   
                 @endforeach
+                @endif
 
                 </div>
                 <div class="panel-body">
@@ -52,4 +54,6 @@
         </div>
     </div>
 </div>
+
+    
 @endsection
